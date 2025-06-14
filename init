@@ -1,6 +1,5 @@
 #cloud-config
 
-disable_root: true
 ssh_pwauth: no
 
 ssh_authorized_keys:
