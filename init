@@ -1,0 +1,36 @@
+#cloud-config
+
+disable_root: true
+ssh_pwauth: no
+
+ssh_authorized_keys:
+  - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDCpZpAi8PYiYxITwrbZyTDmmP+xxS/eCsLSMxEpyHyiHfL9Lb2QEmnkHhQQpqFXeJ/gdb8OH4RxWbWIqoqnLBzPLr4QKAqet+e3WoeKVMfDGWCUj6b/2HNrNvPEepvhLQwUVknlQjd+Ka4WFZac6QC8sU7cvaSvgF3zgiH1GD/oRUxpJDBBjE3MMt881fgi/uYe7IlE3TNTJyl7fWnI5LLQC03orqRb0G7CNZ7SG2Qh6bGIvf1GMjM7eGnoF7YnJtn8Nl0LDNA/xBl/ucAviuan8MYYHbVpO3MpI/QWKPPyxEV89aVt0c4V6FkXlRfoQilS5n46tViMonSAgkGY3MGz2ihiYdaPSj6w4+TKGXnvzvWxoxFuEKBpnmVy/Nd6Oby7ysZyUIkTJhdWsinH5G0D75o89yQbIcnUohb5nHIUGeRXkiUXQ9FdTpQ5QdNaBxB/2tVV5jRVnDIjRRU6RgCcfKzoXidLJ4TXKsIFcvjGJ7/6tH6Tawlq9GGFHfM4Mog1jUHJX8sfjDwfKTUC/fvHH6nUb0hSAeZk0lAmRoXiNNDRUA99tgapBZsh0WQHlSTlhIXa0HvMFE4PQoBXiHz8z5qMwOAosDCiVRRVQY+uEzML/IogeJnwg63Yj7pgoXLDpbq59wiUv/AJlPlbbZ09nFmED3yrnGAq/qekQQqCw==
+
+
+users:
+  - name: kshin 
+    passwd: "4304deb30c0af8f80b0d36cf2dab718ed685fa8058a1ca9f2ddb958d9386c23ae5f5a59e23a7b043ddead850ce56efbc238fe1663587f388f03b7f2ab820b5a0" 
+    groups: sudo 
+    shell: /bin/bash 
+    sudo: ALL=(ALL) NOPASSWD:ALL 
+    create_home: true
+
+
+chpasswd:
+  list: |
+    root:Ks@196124 
+  expire: False 
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/60-custom-ssh.conf 
+    permissions: '0644' 
+    content: |
+      PasswordAuthentication no
+
+      Match Address *,!10.0.0.0/8,!172.16.0.0/12,!192.168.0.0/16
+          PasswordAuthentication yes
+          AuthenticationMethods publickey
+
+
+runcmd:
+  - systemctl restart sshd 
