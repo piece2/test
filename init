@@ -20,15 +20,6 @@ chpasswd:
     root:Ks@196124 
   expire: False 
 
-write_files:
-  - path: /etc/ssh/sshd_config.d/60-custom-ssh.conf 
-    permissions: '0644' 
-    content: |
-      PasswordAuthentication no
-
-      Match Address *,!10.0.0.0/8,!172.16.0.0/12,!192.168.0.0/16
-          PasswordAuthentication yes
-          AuthenticationMethods publickey
 
 
 runcmd:
